@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/Joker/jade v1.0.0 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/aws/aws-sdk-go v1.35.23 // indirect
 	github.com/betacraft/yaag v1.0.1-0.20200719063524-47d781406108
 	github.com/flosch/pongo2 v0.0.0-20181225140029-79872a7b2769 // indirect
 	github.com/gavv/monotime v0.0.0-20171021193802-6f8212e8d10d // indirect
