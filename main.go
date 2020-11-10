@@ -9,10 +9,8 @@ import (
 	"myapp/handles"
 )
 
-
 func main() {
 	app := iris.New()
-
 	yaag.Init(&yaag.Config{ // <- IMPORTANT, init the middleware.
 		On:       true,
 		DocTitle: "Iris",
@@ -27,8 +25,9 @@ func main() {
 		memes := handles.Memes{}
 		memesApi.Use(iris.Compression)
 		memesApi.Get("/memes", memes.GetMemes)
-		memesApi.Post("/memes",memes.PostMemes)
+		memesApi.Post("/memes", memes.PostMemes)
 	}
+
 	app.Listen(":8080")
 
 }
