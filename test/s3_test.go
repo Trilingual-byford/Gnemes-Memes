@@ -8,7 +8,7 @@ import (
 )
 
 func TestS3(t *testing.T) {
-	file, err := os.Open("/Users/jisedai/go/src/Gnemes-Memes/asset/testPic.png")
+	file, err := os.Open("/Users/byford/go/src/Gnemes-Memes/asset/testPic.png")
 	if err != nil {
 		fmt.Print(err.Error())
 		return
