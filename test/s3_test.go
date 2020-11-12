@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	"github.com/smartystreets/assertions"
 	"myapp/service"
 	"os"
 	"testing"
@@ -20,4 +21,5 @@ func TestS3(t *testing.T) {
 		fmt.Print(err.Error())
 	}
 	fmt.Print(picUrl)
+	assertions.ShouldNotBeIn(picUrl)
 }

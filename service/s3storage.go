@@ -4,12 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"mime/multipart"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -40,12 +38,11 @@ type AwsS3Storage struct {
 
 //https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
 func NewAwsS3Storage() AwsS3Storage {
-	os.Setenv("AWS_PROFILE", test-account)
+	//os.Setenv("AWS_PROFILE", test-account)
 	config := NewConfig()
 	newSession, err := session.NewSession(&aws.Config{Region: aws.String("ap-northeast-1"),
 		CredentialsChainVerboseErrors: aws.Bool(true),
 		HTTPClient:                    &http.Client{Timeout: 10 * time.Second},
-		Credentials:                   credentials.NewSharedCredentials("", "test-account"),
 	})
 	if err != nil {
 		println("S3 Storage Session init failed")
@@ -76,8 +73,8 @@ func (storage *AwsS3Storage) UploadMemePic(file multipart.File, fileName string,
 		ACL:         aws.String("public-read"),
 		Body:        file,
 		Bucket:      aws.String(storage.Config.Aws.S3.BucketName),
-		Key:         aws.String("niconicocsc"),
 		ContentType: aws.String(contentType),
+		Key:         aws.String("niconicoTest"),
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload file,%v", err)
