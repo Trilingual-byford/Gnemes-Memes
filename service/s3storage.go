@@ -16,8 +16,6 @@ type Config struct {
 		S3 struct {
 			BucketName string
 			REGION     string
-			//TODO AccessKeyID string
-			//TODO SecretAccessKey string
 		}
 	}
 }
@@ -36,7 +34,6 @@ type AwsS3Storage struct {
 	UpLoader     *s3manager.Uploader
 }
 
-//https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
 func NewAwsS3Storage() AwsS3Storage {
 	//os.Setenv("AWS_PROFILE", test-account)
 	config := NewConfig()
@@ -58,13 +55,13 @@ func (storage *AwsS3Storage) UploadMemePic(file multipart.File, fileName string,
 	var contentType string
 
 	switch extension {
-	case "jpg":
+	case ".jpg":
 		contentType = "image/jpeg"
-	case "jpeg":
+	case ".jpeg":
 		contentType = "image/jpeg"
-	case "gif":
+	case ".gif":
 		contentType = "image/gif"
-	case "png":
+	case ".png":
 		contentType = "image/png"
 	default:
 		return "", errors.New("this extension is invalid")
@@ -74,10 +71,10 @@ func (storage *AwsS3Storage) UploadMemePic(file multipart.File, fileName string,
 		Body:        file,
 		Bucket:      aws.String(storage.Config.Aws.S3.BucketName),
 		ContentType: aws.String(contentType),
-		Key:         aws.String("niconicoTest"),
+		Key:         aws.String(fileName),
 	})
 	if err != nil {
 		return "", fmt.Errorf("failed to upload file,%v", err)
 	}
-	return result.Location, nil
+	return result.Location, err
 }

@@ -4,9 +4,9 @@ import (
 	"github.com/betacraft/yaag/irisyaag"
 	"github.com/betacraft/yaag/yaag"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"myapp/handles"
+	"myapp/service"
 )
 
 func main() {
@@ -19,10 +19,11 @@ func main() {
 	})
 	app.Use(irisyaag.New()) // <- IMPORTANT, register the middleware.
 	app.Use(recover.New())
-	app.Use(logger.New())
+	loggger := app.Logger()
 	memesApi := app.Party("/api/v1/gnemes")
 	{
-		memes := handles.Memes{}
+		storage := service.NewAwsS3Storage()
+		memes := handles.NewMemes(loggger, storage)
 		memesApi.Use(iris.Compression)
 		memesApi.Get("/memes", memes.GetMemes)
 		memesApi.Post("/memes", memes.PostMemes)
