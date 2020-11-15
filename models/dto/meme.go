@@ -1,5 +1,4 @@
-package models
-
+package dto
 
 type Meme struct {
 	OLSentences []string `json:"oLSentences"`

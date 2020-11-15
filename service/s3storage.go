@@ -28,14 +28,12 @@ func NewConfig() *Config {
 }
 
 type AwsS3Storage struct {
-	Config *Config
-	//MaxSize int32
+	Config       *Config
 	RetriesTimes int8
 	UpLoader     *s3manager.Uploader
 }
 
 func NewAwsS3Storage() AwsS3Storage {
-	//os.Setenv("AWS_PROFILE", test-account)
 	config := NewConfig()
 	newSession, err := session.NewSession(&aws.Config{Region: aws.String("ap-northeast-1"),
 		CredentialsChainVerboseErrors: aws.Bool(true),
