@@ -57,8 +57,8 @@ func (m *Memes) PostMemes(ctx iris.Context) {
 	m.logger.Debug("Meme marshalled succeed:", &mMeme)
 
 	m.logger.Info("start uploading meme pic")
-	picUrl, err := m.s3Storage.UploadMemePic(file, info.Filename, filepath.Ext(info.Filename))
-	if err != nil {
+	picUrl, uploadErr := m.s3Storage.UploadMemePic(file, info.Filename, filepath.Ext(info.Filename))
+	if uploadErr != nil {
 		ctx.StopWithProblem(iris.StatusBadRequest, iris.NewProblem().Title("meme upload failed,try it later?").DetailErr(err))
 		return
 	}
