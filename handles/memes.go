@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/kataras/golog"
 	"github.com/kataras/iris/v12"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"myapp/config"
 	"myapp/models/db"
@@ -32,17 +33,30 @@ func NewMemes(logger *golog.Logger, s3Storage service.AwsS3Storage) Memes {
 }
 
 func (m *Memes) GetMemes(ctx iris.Context) {
-	memes := []dto.Meme{
-		{[]string{"11", "dddd"}, 1, []string{"slslsl", "olol"}, []string{"Tag"}, []string{"phrase"}},
-		{[]string{"11", "dddd"}, 1, []string{"slslsl", "olol"}, []string{"Tag"}, []string{"phrase"}},
-		{[]string{"11", "dddd"}, 1, []string{"slslsl", "olol"}, []string{"Tag"}, []string{"phrase"}},
+	//Define filter query for fetching specific document from collection
+	filter := bson.D{{}} //bson.D{{}} specifies all document
+	cur, err := m.memeCollection.Find(context.Background(), filter)
+	if err != nil {
+		ctx.StopWithProblem(iris.StatusBadRequest, iris.NewProblem().Title("failed to fetch memes").DetailErr(err))
 	}
-	ctx.JSON(memes)
+	var gnemes []db.Gneme
+	for cur.Next(context.Background()) {
+		meme := db.Gneme{}
+		decodeErr := cur.Decode(&meme)
+		if decodeErr == nil {
+			gnemes = append(gnemes, meme)
+		} else {
+			m.logger.Error("gnemes decode Error", decodeErr)
+		}
+	}
+	ctx.JSON(gnemes)
 }
 
 func (m *Memes) PostMemes(ctx iris.Context) {
 	file, info, err := ctx.FormFile("file")
-	defer file.Close()
+	if file != nil {
+		defer file.Close()
+	}
 	if err != nil {
 		ctx.StopWithProblem(iris.StatusBadRequest, iris.NewProblem().Title("failed to upload file").DetailErr(err))
 		return
