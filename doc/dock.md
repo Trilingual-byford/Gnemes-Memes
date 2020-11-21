@@ -54,4 +54,12 @@
  ❯ docker run --name website -d -p 3000:80 nginx:latest //run a image and name it
  b2293ca8b691c37f25ffe585b6e6cbecb1b44dfa75d41ef2ce3d5ebafe58328f
 ```
-### Docker Volumes Allows sharing of data.
+- hosting some simple static content　
+- https://hub.docker.com/_/nginx
+```console
+❯ docker run --name website -v $(pwd):/usr/share/nginx/html:ro -d -p 8080:80 nginx
+1ff11515ab4cf36e2d55d828ef94122ab7a57d81985f27f0edc6deaf6078bec0
+❯ ls
+apidoc.html      apidoc.html.json dock.md
+```
+### Docker Volumes Allows sharing of data. Volume between host and container.
