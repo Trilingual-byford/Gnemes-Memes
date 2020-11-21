@@ -88,3 +88,23 @@
   "ip": "::1",
   "bytes_sent": -1
 }
+{
+  "timestamp": "2020-11-21 23:38:14",
+  "latency": 24863,
+  "code": 404,
+  "method": "POST",
+  "path": "/api/v1/greetingInu",
+  "ip": "::1",
+  "request": "{\"dir\":\"Nodsadas dddway\",\"gender\":\"Male\",\"width\":21,\"height\":12,\"picSize\":11,\"likes\":11,\"attribution\":\"gogo\",\"name\":\"haha\"}",
+  "bytes_received": 140,
+  "bytes_sent": 9
+}
+{
+  "timestamp": "2020-11-21 23:39:17",
+  "latency": 23948860,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
