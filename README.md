@@ -1,4 +1,5 @@
-# Gnemes-Memes - developing with Docker and golang(Iris framework)
+# Gnemes-Memes - developing with Docker and golang
+### Gnemes:Explore・understand・enjoy world's funny Internet Memes
 
 
 #### To start the application
