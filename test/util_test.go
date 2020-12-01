@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/corona10/goimagehash"
 	"github.com/smartystreets/assertions"
+	"gnemes/utils"
 	"image/png"
-	"myapp/utils"
 	"os"
 	"path/filepath"
 	"testing"
@@ -18,7 +18,7 @@ func TestExtensionUtil(t *testing.T) {
 }
 
 func TestPicUtil(t *testing.T) {
-	file, _ := os.Open("/Users/byford/go/src/Gnemes-Memes/asset/testPic.png")
+	file, _ := os.Open("/Users/byford/go/src/memes/asset/testPic.png")
 	//defer file.Close()
 	//img, err := jpeg.Decode(file)
 	img, err := png.Decode(file)
@@ -33,15 +33,15 @@ func TestPicUtil(t *testing.T) {
 	assertions.ShouldNotBeNil(hash)
 }
 func TestPicUtilFuncTest(t *testing.T) {
-	file, _ := os.Open("/Users/byford/go/src/Gnemes-Memes/asset/testPic.png")
+	file, _ := os.Open("/Users/byford/go/src/memes/asset/testPic.png")
 	hash, err := utils.GetPicHash(file, ".png")
 	assertions.ShouldBeNil(err)
 	assertions.ShouldNotBeNil(hash)
-	jpegFile, _ := os.Open("/Users/byford/go/src/Gnemes-Memes/asset/pic/funny-wholesome-animal-memes-1.jpeg")
+	jpegFile, _ := os.Open("/Users/byford/go/src/memes/asset/pic/funny-wholesome-animal-memes-1.jpeg")
 	jpegHash, err2 := utils.GetPicHash(jpegFile, ".jpeg")
 	assertions.ShouldBeNil(err2)
 	assertions.ShouldNotBeNil(jpegHash)
-	jpgFile, _ := os.Open("/Users/byford/go/src/Gnemes-Memes/asset/pic/funny-wholesome-animal-memes-2.jpg")
+	jpgFile, _ := os.Open("/Users/byford/go/src/memes/asset/pic/funny-wholesome-animal-memes-2.jpg")
 	jpgHash, err3 := utils.GetPicHash(jpgFile, ".jpg")
 	assertions.ShouldBeNil(err3)
 	assertions.ShouldNotBeNil(jpgHash)

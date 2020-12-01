@@ -6,8 +6,11 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/accesslog"
 	"github.com/kataras/iris/v12/middleware/recover"
-	"myapp/handles"
-	"myapp/service"
+	"gnemes/memes/handles"
+	"gnemes/memes/service"
+
+	//"gnemes/handles"
+	//"gnemes/service"
 	"os"
 )
 
