@@ -6,9 +6,12 @@ require (
 	github.com/aws/aws-sdk-go v1.35.23
 	github.com/betacraft/yaag v1.0.1-0.20200719063524-47d781406108
 	github.com/corona10/goimagehash v1.0.3
+	github.com/gorilla/securecookie v1.1.1
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/golog v0.1.5
 	github.com/kataras/iris/v12 v12.2.0-alpha.0.20201106121953-7f523d52e152
+	github.com/kataras/jwt v0.0.5
+	github.com/markbates/goth v1.66.0
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
