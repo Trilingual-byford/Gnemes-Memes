@@ -1,5 +1,15 @@
 package api
 
-func NewRouter() {
+import (
+	"github.com/kataras/iris/v12"
+	"gnemes/user/repository"
+)
+
+func NewRouter(repo repository.UserRepository) func(iris.Party) {
+	return func(router iris.Party) {
+		router.Post("/signin", SignIn(repo))
+		router.Use(Verify())
+
+	}
 
 }

@@ -1,0 +1,9 @@
+{
+  "timestamp": "2020-12-04 23:49:05",
+  "latency": 7604605,
+  "code": 400,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}

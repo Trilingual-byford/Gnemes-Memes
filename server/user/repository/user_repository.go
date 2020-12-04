@@ -27,7 +27,8 @@ func NewMongoUserRepository() UserRepository {
 }
 
 func (m *mongoUserRepository) Create(username, password, email, avatar string, sex model.SexType) (model.User, error) {
-	panic("implement me")
+	user := model.User("")
+	user.ID
 }
 
 func (m *mongoUserRepository) GetByUsernameAndPassword(username, password string) (model.User, bool) {
