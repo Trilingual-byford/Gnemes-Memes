@@ -7,3 +7,84 @@
   "ip": "::1",
   "bytes_sent": -1
 }
+{
+  "timestamp": "2020-12-05 03:49:13",
+  "latency": 1681589,
+  "code": 400,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 03:59:16",
+  "latency": 1783895,
+  "code": 400,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 03:59:19",
+  "latency": 1972064,
+  "code": 400,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 04:11:50",
+  "latency": 2598086,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 04:11:52",
+  "latency": 1940887,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 04:11:55",
+  "latency": 1851680,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2020-12-05 04:12:07",
+  "latency": 7554,
+  "code": 404,
+  "method": "GET",
+  "path": "/",
+  "ip": "::1",
+  "bytes_sent": 9
+}
+{
+  "timestamp": "2020-12-05 04:12:13",
+  "latency": 7204,
+  "code": 404,
+  "method": "GET",
+  "path": "/express",
+  "ip": "::1",
+  "bytes_sent": 9
+}
+{
+  "timestamp": "2020-12-05 04:27:16",
+  "latency": 3435252,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "::1",
+  "bytes_sent": -1
+}
