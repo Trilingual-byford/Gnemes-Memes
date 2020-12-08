@@ -32,9 +32,9 @@ func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 	mongoClient, err := config.GnemesDB(config.USER, logger)
 	m.logger = logger
 	if err != nil {
-		logger.Error("")
+		logger.Error("failed to init mongo Repository for User", err)
 	}
-	collection := mongoClient.Database("gnemes").Collection("GnemesPost")
+	collection := mongoClient.Database("gnemes").Collection("GnemesUser")
 	m.userCollection = collection
 	return m
 }

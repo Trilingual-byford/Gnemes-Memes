@@ -56,8 +56,35 @@ func AllowAdmin(ctx iris.Context) {
 		ctx.StopWithText(iris.StatusForbidden, "admin access required")
 		return
 	}
-
 	ctx.Next()
+}
+
+func SignUp(repo repository.UserRepository) iris.Handler {
+	return func(ctx iris.Context) {
+		var (
+			pwd      = ctx.FormValue("password")
+			username = ctx.FormValue("username")
+			email    = ctx.FormValue("email")
+			avatar   = ctx.FormValue("avatar")
+			sex      = ctx.FormValue("sex")
+		)
+		hashedPassword, err := utils.GeneratePassword(pwd)
+		if err != nil {
+			ctx.StopWithJSON(iris.StatusBadRequest, err)
+		}
+
+		sexType, err := model.GetSexTypeFromString(sex)
+		if err != nil {
+			ctx.StopWithJSON(iris.StatusBadRequest, err)
+		}
+		user, err := repo.Create(username, string(hashedPassword), email, avatar, sexType)
+		if err != nil {
+			ctx.StopWithJSON(iris.StatusBadRequest, err)
+		} else {
+			ctx.JSON(user)
+		}
+
+	}
 }
 
 // SignIn accepts the user form data and returns a token to authorize a client.
@@ -86,7 +113,7 @@ func SignIn(repo repository.UserRepository) iris.Handler {
 		}
 
 		claims := UserClaims{
-			UserEmail: user.ID.String(),
+			UserEmail: user.Email,
 			Roles:     user.Roles,
 		}
 

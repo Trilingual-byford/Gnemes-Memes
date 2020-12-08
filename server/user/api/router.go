@@ -8,8 +8,8 @@ import (
 func NewRouter(repo repository.UserRepository) func(iris.Party) {
 	return func(router iris.Party) {
 		router.Post("/signin", SignIn(repo))
+		router.Post("/signup", SignUp(repo))
 		router.Use(Verify())
-
 	}
 
 }

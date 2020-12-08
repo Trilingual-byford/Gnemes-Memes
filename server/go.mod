@@ -18,6 +18,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/stretchr/testify v1.6.1
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go.mongodb.org/mongo-driver v1.4.3
 	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897

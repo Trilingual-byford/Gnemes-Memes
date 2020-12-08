@@ -1,0 +1,34 @@
+[
+  {
+    write
+    errors: [
+      {
+        E11000
+        duplicate
+        key
+        error
+        collection: gnemes.GnemesUser
+        index: email_1
+        collation: {
+          locale: "en",
+          caseLevel: false,
+          caseFirst: "off",
+          strength: 2,
+          numericOrdering: false,
+          alternate: "non-ignorable",
+          maxVariable: "punct",
+          normalization: false,
+          backwards: false,
+          version: "57.1"
+        }
+        dup
+        key: {
+          email: "0x1414140107"
+        }
+      }
+    ]
+  },
+  {
+    <nil>
+  }
+]

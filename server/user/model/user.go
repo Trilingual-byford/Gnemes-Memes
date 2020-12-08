@@ -1,13 +1,16 @@
 package model
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
-type SexType int8
+type SexType string
 
 const (
-	Man   SexType = 1
-	MALE  SexType = 0
-	Other SexType = 2
+	Male   SexType = "male"
+	FEMALE SexType = "female"
+	Other  SexType = "other"
 )
 
 type User struct {
@@ -23,4 +26,19 @@ type User struct {
 	IsActivating                bool      `bson:"isActivating" json:"isActivating"`
 	LikedCollections            []string  `bson:"likedCollections" json:"likedCollections"`
 	SavedCollection             []string  `bson:"savedCollection" json:"savedCollection"`
+}
+
+func GetSexTypeFromString(x string) (SexType, error) {
+	var sexType SexType
+	switch x {
+	case string(Male):
+		sexType = Male
+		return sexType, nil
+	case string(FEMALE):
+		return sexType, nil
+	case string(Other):
+		return sexType, nil
+	default:
+		return sexType, errors.New("sex type is not exist")
+	}
 }

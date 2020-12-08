@@ -15,6 +15,6 @@ func main() {
 	loggger := app.Logger()
 	userRepo := repository.NewMongoUserRepository(loggger)
 	app.PartyFunc("/", api.NewRouter(userRepo))
-	app.Listen(":8081")
+	app.Listen(":8082")
 
 }
