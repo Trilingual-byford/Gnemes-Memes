@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"context"
 	"github.com/kataras/golog"
 	"gnemes/common/config"
 	"gnemes/user/model"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"sync"
 	"time"
@@ -22,11 +24,13 @@ var (
 type mongoUserRepository struct {
 	userCollection *mongo.Collection
 	mu             sync.RWMutex
+	logger         *golog.Logger
 }
 
 func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 	m := new(mongoUserRepository)
 	mongoClient, err := config.GnemesDB(config.USER, logger)
+	m.logger = logger
 	if err != nil {
 		logger.Error("")
 	}
@@ -39,7 +43,13 @@ func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar str
 	//user := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
 	roles := []model.Role{model.USER}
 	user := model.User{username, email, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
-
+	result, err := m.userCollection.InsertOne(context.Background(), user)
+	if err != nil {
+		m.logger.Error("failed to save userInfo", err)
+	} else {
+		m.logger.Error("saved successfully", result)
+	}
+	return user, err
 }
 
 func (m *mongoUserRepository) GetByUsernameAndPassword(username, password string) (model.User, bool) {
@@ -47,5 +57,17 @@ func (m *mongoUserRepository) GetByUsernameAndPassword(username, password string
 }
 
 func (m *mongoUserRepository) GetAll() ([]model.User, error) {
-	panic("implement me")
+	filter := bson.D{{}}
+	cur, err := m.userCollection.Find(context.Background(), filter)
+	var users []model.User
+	for cur.Next(context.Background()) {
+		user := model.User{}
+		err := cur.Decode(&user)
+		if err != nil {
+			m.logger.Error("decode user error", err)
+		} else {
+			users = append(users, user)
+		}
+	}
+	return users, err
 }

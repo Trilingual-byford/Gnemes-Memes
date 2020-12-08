@@ -7,12 +7,13 @@ import (
 )
 
 var (
-	sigKey   = []byte("signature_hmac_secret_shared_key")
-	userRepo = repository.NewMongoUserRepository()
+	sigKey = []byte("signature_hmac_secret_shared_key")
 )
 
 func main() {
 	app := iris.New()
+	loggger := app.Logger()
+	userRepo := repository.NewMongoUserRepository(loggger)
 	app.PartyFunc("/", api.NewRouter(userRepo))
 	app.Listen(":8081")
 
