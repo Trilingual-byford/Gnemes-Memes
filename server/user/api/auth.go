@@ -65,7 +65,6 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 			pwd      = ctx.FormValue("password")
 			username = ctx.FormValue("username")
 			email    = ctx.FormValue("email")
-			avatar   = ctx.FormValue("avatar")
 			sex      = ctx.FormValue("sex")
 		)
 		hashedPassword, err := utils.GeneratePassword(pwd)
@@ -77,7 +76,7 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		}
-		user, err := repo.Create(username, string(hashedPassword), email, avatar, sexType)
+		user, err := repo.Create(username, string(hashedPassword), email, "", sexType)
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		} else {
