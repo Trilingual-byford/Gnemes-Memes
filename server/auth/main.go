@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/kataras/iris/v12"
-	"gnemes/user/api"
-	"gnemes/user/repository"
+	"gnemes/auth/api"
+	"gnemes/auth/repository"
 )
 
 var (
@@ -16,5 +16,4 @@ func main() {
 	userRepo := repository.NewMongoUserRepository(loggger)
 	app.PartyFunc("/", api.NewRouter(userRepo))
 	app.Listen(":8082")
-
 }

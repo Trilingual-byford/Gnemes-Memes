@@ -13,7 +13,7 @@ func MustGeneratePassword(userPassword string) []byte {
 }
 
 // GeneratePassword will generate a hashed password for us based on the
-// user's input.
+// auth's input.
 func GeneratePassword(userPassword string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(userPassword), bcrypt.DefaultCost)
 }

@@ -16,7 +16,7 @@ const (
 	USER DB = "gnemes_user"
 )
 
-func GnemesDB(db DB, logger *golog.Logger) (*mongo.Client, error) {
+func GetGnemesDBClient(db DB, logger *golog.Logger) (*mongo.Client, error) {
 	//mongoClientOpt := options.Client().ApplyURI("mongodb://gnemes:123456@localhost:27017/gnemes?authSource=admin&authMechanism=SCRAM-SHA-256&ssl=false")
 	//mongoClientOpt := options.Client().ApplyURI("mongodb://localhost:27017")
 	//mongo --username "myTestDBUser" --password --authenticationDatabase test --authenticationMechanism SCRAM-SHA-256

@@ -4,6 +4,6 @@ type Role string
 
 const (
 	Admin        Role = "admin"
-	USER         Role = "user"
+	USER         Role = "auth"
 	PREMIUM_USER Role = "PremiumUser"
 )

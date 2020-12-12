@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/kataras/golog"
 	"gnemes/common/config"
-	"gnemes/user/model"
+	"gnemes/common/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"sync"
@@ -29,7 +29,7 @@ type mongoUserRepository struct {
 
 func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 	m := new(mongoUserRepository)
-	mongoClient, err := config.GnemesDB(config.USER, logger)
+	mongoClient, err := config.GetGnemesDBClient(config.USER, logger)
 	m.logger = logger
 	if err != nil {
 		logger.Error("failed to init mongo Repository for User", err)
@@ -40,7 +40,7 @@ func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 }
 
 func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
-	//user := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
+	//auth := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
 	roles := []model.Role{model.USER}
 	user := model.User{username, email, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
 	result, err := m.userCollection.InsertOne(context.Background(), user)
@@ -64,7 +64,7 @@ func (m *mongoUserRepository) GetAll() ([]model.User, error) {
 		user := model.User{}
 		err := cur.Decode(&user)
 		if err != nil {
-			m.logger.Error("decode user error", err)
+			m.logger.Error("decode auth error", err)
 		} else {
 			users = append(users, user)
 		}

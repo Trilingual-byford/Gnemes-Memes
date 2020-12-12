@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/jwt"
+	"gnemes/auth/repository"
+	"gnemes/common/model"
 	"gnemes/common/utils"
-	"gnemes/user/model"
-	"gnemes/user/repository"
 	"os"
 	"time"
 )
@@ -22,7 +22,7 @@ func getSecretKey() string {
 	return secret
 }
 
-// UserClaims represents the user token claims.
+// UserClaims represents the auth token claims.
 type UserClaims struct {
 	UserEmail string       `json:"user_email"`
 	Roles     []model.Role `json:"roles"`
@@ -82,11 +82,10 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 		} else {
 			ctx.JSON(user)
 		}
-
 	}
 }
 
-// SignIn accepts the user form data and returns a token to authorize a client.
+// SignIn accepts the auth form data and returns a token to authorize a client.
 func SignIn(repo repository.UserRepository) iris.Handler {
 	secret := getSecretKey()
 	signer := jwt.NewSigner(jwt.HS256, []byte(secret), 15*time.Minute)
@@ -136,9 +135,11 @@ func SignIn(repo repository.UserRepository) iris.Handler {
 	}
 }
 
-// SignOut invalidates a user from server-side using the jwt Blocklist.
-func SignOut(ctx iris.Context) {
-	ctx.Logout() // this is automatically binded to a function which invalidates the current request token by the JWT Verifier above.
+// SignOut invalidates a auth from server-side using the jwt Blocklist.
+func SignOut(ctx iris.Context) iris.Handler {
+	return func(ctx iris.Context) {
+		ctx.Logout() // this is automatically binded to a function which invalidates the current request token by the JWT Verifier above.
+	}
 }
 
 // GetClaims returns the current authorized client claims.
@@ -147,7 +148,7 @@ func GetClaims(ctx iris.Context) *UserClaims {
 	return claims
 }
 
-// GetUserID returns the current authorized client's user id extracted from claims.
+// GetUserID returns the current authorized client's auth id extracted from claims.
 func GetUserEmail(ctx iris.Context) string {
 	return GetClaims(ctx).UserEmail
 }
