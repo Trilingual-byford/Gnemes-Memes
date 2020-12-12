@@ -1,4 +1,9 @@
 #### Genemes
+
+###### System design diagram
+
+![alt text](http://url/to/img.png)
+
 ❯ openssl genrsa -des3 -out private_rsa.pem 2048
 Generating RSA private key, 2048 bit long modulus
 .....................................+++
@@ -8,3 +13,5 @@ Enter pass phrase for private_rsa.pem:
 Verifying - Enter pass phrase for private_rsa.pem:
 
 private_rsa.pem:malygose
+
+
