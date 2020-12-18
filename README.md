@@ -27,3 +27,4 @@ Enter pass phrase for private_rsa.pem:
 Verifying - Enter pass phrase for private_rsa.pem:
 
 private_rsa.pem:malygose
+Implement register and login this week 12.18
