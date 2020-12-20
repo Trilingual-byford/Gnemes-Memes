@@ -24,8 +24,11 @@ type User struct {
 	LastLoginTime               time.Time `bson:"lastLoginTime" json:"lastLoginTime"`
 	IsCredentialsNonExpiredFlag bool      `bson:"isCredentialsNonExpiredFlag" json:"isCredentialsNonExpiredFlag"`
 	IsActivating                bool      `bson:"isActivating" json:"isActivating"`
-	LikedCollections            []string  `bson:"likedCollections" json:"likedCollections"`
-	SavedCollection             []string  `bson:"savedCollection" json:"savedCollection"`
+	//NativeLanguage
+	//Location
+	//Country
+	LikedCollections []string `bson:"likedCollections" json:"likedCollections"`
+	SavedCollection  []string `bson:"savedCollection" json:"savedCollection"`
 }
 
 func GetSexTypeFromString(x string) (SexType, error) {

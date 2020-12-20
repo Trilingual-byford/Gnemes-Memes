@@ -38,6 +38,8 @@ func GetGnemesDBClient(db DB, logger *golog.Logger) (*mongo.Client, error) {
 		var pingErr = client.Ping(ctx, nil)
 		if pingErr != nil {
 			logger.Error("mongodb ping failed", pingErr)
+		} else {
+			logger.Info("init mongodb connection successfully")
 		}
 	}
 	return client, err

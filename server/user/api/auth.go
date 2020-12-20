@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/jwt"
-	"gnemes/auth/repository"
+	"github.com/kataras/iris/v12/sessions/sessiondb/redis"
 	"gnemes/common/model"
 	"gnemes/common/utils"
+	"gnemes/user/repository"
 	"os"
 	"time"
 )
 
 const defaultSecretKey = "sercrethatmaycontainch@r$32chars"
+const authSid = "Auth information of Gnemes User"
 
 func getSecretKey() string {
 	secret := os.Getenv(utils.AppName + "_SECRET")
@@ -22,7 +24,7 @@ func getSecretKey() string {
 	return secret
 }
 
-// UserClaims represents the auth token claims.
+// UserClaims represents the user token claims.
 type UserClaims struct {
 	UserEmail string       `json:"user_email"`
 	Roles     []model.Role `json:"roles"`
@@ -85,8 +87,8 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 	}
 }
 
-// SignIn accepts the auth form data and returns a token to authorize a client.
-func SignIn(repo repository.UserRepository) iris.Handler {
+// SignIn accepts the user form data and returns a token to authorize a client.
+func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 	secret := getSecretKey()
 	signer := jwt.NewSigner(jwt.HS256, []byte(secret), 15*time.Minute)
 
@@ -100,42 +102,40 @@ func SignIn(repo repository.UserRepository) iris.Handler {
 		*/
 
 		var (
-			username = ctx.FormValue("username")
-			password = ctx.FormValue("password")
+			userEmail = ctx.FormValue("userEmail")
+			password  = ctx.FormValue("password")
 		)
 
-		user, ok := repo.GetByUsernameAndPassword(username, password)
+		user, ok := repo.GetByUserEmailAndPassword(userEmail, password)
 		if !ok {
 			ctx.StopWithText(iris.StatusBadRequest, "wrong username or password")
 			return
 		}
-
-		claims := UserClaims{
-			UserEmail: user.Email,
-			Roles:     user.Roles,
-		}
-
 		// Optionally, generate a JWT ID.
 		jti, err := utils.GenerateUUID()
 		if err != nil {
 			ctx.StopWithError(iris.StatusInternalServerError, err)
 			return
 		}
+		claims := UserClaims{
+			UserEmail: user.Email,
+			Roles:     user.Roles,
+		}
 
 		token, err := signer.Sign(claims, jwt.Claims{
 			ID:     jti,
 			Issuer: utils.AppName,
 		})
+		redisErr := db.Set(authSid, user.Email, "token", time.Duration(30)*time.Second, true)
 		if err != nil {
-			ctx.StopWithError(iris.StatusInternalServerError, err)
-			return
+			ctx.StopWithError(iris.StatusInternalServerError, redisErr)
 		}
 
 		ctx.Write(token)
 	}
 }
 
-// SignOut invalidates a auth from server-side using the jwt Blocklist.
+// SignOut invalidates a user from server-side using the jwt Blocklist.
 func SignOut(ctx iris.Context) iris.Handler {
 	return func(ctx iris.Context) {
 		ctx.Logout() // this is automatically binded to a function which invalidates the current request token by the JWT Verifier above.
@@ -148,7 +148,7 @@ func GetClaims(ctx iris.Context) *UserClaims {
 	return claims
 }
 
-// GetUserID returns the current authorized client's auth id extracted from claims.
+// GetUserID returns the current authorized client's user id extracted from claims.
 func GetUserEmail(ctx iris.Context) string {
 	return GetClaims(ctx).UserEmail
 }

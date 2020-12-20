@@ -15,7 +15,7 @@ func TestRedisSetFunctionality(t *testing.T) {
 	value := db.Get("niconicocsc", "TestRedisSetFunctionality")
 	assertions.ShouldNotBeEmpty(value)
 }
-func TestRedisGetFuncionality(t *testing.T) {
+func TestRedisGetFunctionality(t *testing.T) {
 	logger := golog.New()
 	db := GetRedisDatabase(logger)
 	value := db.Get("niconicocsc", "TestRedisSetFunctionality")

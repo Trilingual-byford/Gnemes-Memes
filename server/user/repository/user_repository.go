@@ -13,7 +13,7 @@ import (
 
 type UserRepository interface {
 	Create(username, password, email, avatar string, sex model.SexType) (model.User, error)
-	GetByUsernameAndPassword(username, password string) (model.User, bool)
+	GetByUserEmailAndPassword(username, password string) (model.User, bool)
 	GetAll() ([]model.User, error)
 }
 
@@ -40,7 +40,7 @@ func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 }
 
 func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
-	//auth := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
+	//user := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
 	roles := []model.Role{model.USER}
 	user := model.User{username, email, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
 	result, err := m.userCollection.InsertOne(context.Background(), user)
@@ -52,7 +52,7 @@ func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar str
 	return user, err
 }
 
-func (m *mongoUserRepository) GetByUsernameAndPassword(username, password string) (model.User, bool) {
+func (m *mongoUserRepository) GetByUserEmailAndPassword(username, password string) (model.User, bool) {
 	panic("implement me")
 }
 
@@ -64,7 +64,7 @@ func (m *mongoUserRepository) GetAll() ([]model.User, error) {
 		user := model.User{}
 		err := cur.Decode(&user)
 		if err != nil {
-			m.logger.Error("decode auth error", err)
+			m.logger.Error("decode user error", err)
 		} else {
 			users = append(users, user)
 		}
