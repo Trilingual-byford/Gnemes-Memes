@@ -5,6 +5,7 @@ import (
 	"github.com/kataras/golog"
 	"gnemes/common/config"
 	"gnemes/common/model"
+	"gnemes/common/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"sync"
@@ -13,7 +14,8 @@ import (
 
 type UserRepository interface {
 	Create(username, password, email, avatar string, sex model.SexType) (model.User, error)
-	GetByUserEmailAndPassword(username, password string) (model.User, bool)
+	GetByUserEmailAndPassword(email, password string) (model.User, bool)
+	GetAllGnemesColletionsByUserEmail(email string) (model.User, bool)
 	GetAll() ([]model.User, error)
 }
 
@@ -25,6 +27,10 @@ type mongoUserRepository struct {
 	userCollection *mongo.Collection
 	mu             sync.RWMutex
 	logger         *golog.Logger
+}
+
+func (m *mongoUserRepository) GetAllGnemesColletionsByUserEmail(email string) (model.User, bool) {
+	panic("implement me")
 }
 
 func NewMongoUserRepository(logger *golog.Logger) UserRepository {
@@ -52,8 +58,21 @@ func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar str
 	return user, err
 }
 
-func (m *mongoUserRepository) GetByUserEmailAndPassword(username, password string) (model.User, bool) {
-	panic("implement me")
+func (m *mongoUserRepository) GetByUserEmailAndPassword(userEmail, password string) (model.User, bool) {
+	var users model.User
+	err := m.userCollection.FindOne(context.Background(), bson.M{"email": userEmail}).Decode(&users)
+	if err != nil {
+		m.logger.Error("Failed to find Use from Db due to:", err)
+		return users, false
+	} else {
+		isValidated := utils.ValidatePassword(password, []byte(users.HashedPassword))
+		if isValidated {
+			return users, true
+		} else {
+			return users, false
+		}
+	}
+
 }
 
 func (m *mongoUserRepository) GetAll() ([]model.User, error) {
@@ -71,3 +90,7 @@ func (m *mongoUserRepository) GetAll() ([]model.User, error) {
 	}
 	return users, err
 }
+
+//func ()  {
+//
+//}

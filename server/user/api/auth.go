@@ -43,7 +43,6 @@ func (u *UserClaims) Validate() error {
 // Verify allows only authorized clients.
 func Verify() iris.Handler {
 	secret := getSecretKey()
-
 	verifier := jwt.NewVerifier(jwt.HS256, []byte(secret), jwt.Expected{Issuer: utils.AppName})
 	verifier.Extractors = []jwt.TokenExtractor{jwt.FromHeader} // extract token only from Authorization: Bearer $token
 	return verifier.Verify(func() interface{} {
@@ -105,7 +104,6 @@ func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 			userEmail = ctx.FormValue("userEmail")
 			password  = ctx.FormValue("password")
 		)
-
 		user, ok := repo.GetByUserEmailAndPassword(userEmail, password)
 		if !ok {
 			ctx.StopWithText(iris.StatusBadRequest, "wrong username or password")
