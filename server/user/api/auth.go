@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
 	"github.com/kataras/iris/v12/middleware/jwt"
 	"github.com/kataras/iris/v12/sessions/sessiondb/redis"
 	"gnemes/common/model"
@@ -45,9 +46,21 @@ func Verify() iris.Handler {
 	secret := getSecretKey()
 	verifier := jwt.NewVerifier(jwt.HS256, []byte(secret), jwt.Expected{Issuer: utils.AppName})
 	verifier.Extractors = []jwt.TokenExtractor{jwt.FromHeader} // extract token only from Authorization: Bearer $token
-	return verifier.Verify(func() interface{} {
-		return new(UserClaims)
-	})
+	//return verifier.Verify(func() interface{} {
+	//
+	//	return new(UserClaims)
+	//})
+	return func(ctx *context.Context) {
+		token := []byte(verifier.RequestToken(ctx))
+		verifiedToken, err := verifier.VerifyToken(token)
+		//verifiedToken.Payload
+		if err != nil {
+
+		}
+		const verifiedTokenContextKey = "iris.jwt.token"
+		ctx.Values().Set(verifiedTokenContextKey, verifiedToken)
+		ctx.Next()
+	}
 }
 
 // AllowAdmin allows only authorized clients with "admin" access role.
@@ -119,10 +132,14 @@ func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 			UserEmail: user.Email,
 			Roles:     user.Roles,
 		}
+		now := time.Now()
+		expiresAt := now.Add(time.Minute * 60)
 
 		token, err := signer.Sign(claims, jwt.Claims{
-			ID:     jti,
-			Issuer: utils.AppName,
+			ID:       jti,
+			Issuer:   utils.AppName,
+			IssuedAt: now.Unix(),
+			Expiry:   expiresAt.Unix(),
 		})
 		redisErr := db.Set(authSid, user.Email, "token", time.Duration(30)*time.Second, true)
 		if err != nil {
