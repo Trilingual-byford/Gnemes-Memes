@@ -1,12 +1,21 @@
 package utils
 
 import (
-	"github.com/kataras/iris/v12/context"
+	"errors"
 	"github.com/kataras/iris/v12/sessions/sessiondb/redis"
+	"strings"
 )
 
-func CheckLoginStatus(ctx *context.Context, redis *redis.Database, authSid string, verifiedTokenContextKey string) error {
-	//verifiedToken := ctx.Values().Get(verifiedTokenContextKey)
-	//verifiedToken.
-	return nil
+func CheckLoginStatus(redis *redis.Database, authSid string, userId string, token string) (isLogin bool, err error) {
+	value := redis.Get(authSid, userId)
+	if value == nil {
+		return false, errors.New("authError:didn't login")
+	}
+	compareResult := strings.Compare(token, value.(string))
+	switch compareResult {
+	case 0:
+		return true, nil
+	default:
+		return false, errors.New("token don't match")
+	}
 }

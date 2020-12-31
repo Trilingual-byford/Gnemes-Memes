@@ -16,6 +16,7 @@ const (
 type User struct {
 	UserName                    string    `bson:"userName" json:"userName"`
 	Email                       string    `bson:"email" json:"email"`
+	UserId                      string    `bson:"userId" json:"userId"`
 	Avatar                      string    `bson:"avatar" json:"avatar"`
 	HashedPassword              string    `bson:"passWord" json:"passWord"`
 	Roles                       []Role    `bson:"roles" json:"roles"`

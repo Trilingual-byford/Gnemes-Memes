@@ -13,7 +13,7 @@ import (
 )
 
 type UserRepository interface {
-	Create(username, password, email, avatar string, sex model.SexType) (model.User, error)
+	Create(username, userId, password, email, avatar string, sex model.SexType) (model.User, error)
 	GetByUserEmailAndPassword(email, password string) (model.User, bool)
 	GetAllGnemesColletionsByUserEmail(email string) (model.User, bool)
 	GetAll() ([]model.User, error)
@@ -45,10 +45,10 @@ func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 	return m
 }
 
-func (m *mongoUserRepository) Create(username, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
+func (m *mongoUserRepository) Create(username, userId, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
 	//user := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
 	roles := []model.Role{model.USER}
-	user := model.User{username, email, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
+	user := model.User{username, email, userId, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
 	result, err := m.userCollection.InsertOne(context.Background(), user)
 	if err != nil {
 		m.logger.Error("failed to save userInfo", err)

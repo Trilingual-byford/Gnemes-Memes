@@ -12,12 +12,12 @@ func NewRouter(repo repository.UserRepository, db auth.RedisManagerOfAuth) func(
 		//router.Post("/user/sign-out", SignOut())
 		router.Post("/user/sign-up", SignUp(repo))
 		router.Use(Verify(db.Database))
-		router.Get("/{userMailAddr:string}/save/collection", func(ctx iris.Context) {
+		router.Get("/{userId:string}/save/collection", func(ctx iris.Context) {
 			ctx.JSON("collection")
 		})
-		router.Get("/{userMailAddr:string}/like/collection")
-		router.Get("/{userMailAddr:string}/info")
-		router.Get("/{userMailAddr:string}/app/preference")
+		router.Get("/{userId:string}/like/collection")
+		router.Get("/{userId:string}/info")
+		router.Get("/{userId:string}/app/preference")
 
 	}
 

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
@@ -55,7 +56,14 @@ func Verify(redis *redis.Database) iris.Handler {
 		const verifiedTokenContextKey = "iris.jwt.token"
 		//verifiedToken.Payload
 		ctx.Values().Set(verifiedTokenContextKey, verifiedToken)
-
+		userId := ctx.Params().Get("userId")
+		isLogin, loginErr := utils.CheckLoginStatus(redis, authSid, userId, string(token))
+		if loginErr != nil {
+			verifier.ErrorHandler(ctx, loginErr)
+		}
+		if !isLogin {
+			verifier.ErrorHandler(ctx, errors.New("need login in first"))
+		}
 		ctx.Next()
 	}
 }
@@ -75,6 +83,7 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 		var (
 			pwd      = ctx.FormValue("password")
 			username = ctx.FormValue("username")
+			userId   = ctx.FormValue("userId")
 			email    = ctx.FormValue("email")
 			sex      = ctx.FormValue("sex")
 		)
@@ -87,7 +96,7 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		}
-		user, err := repo.Create(username, string(hashedPassword), email, "", sexType)
+		user, err := repo.Create(username, userId, string(hashedPassword), email, "", sexType)
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		} else {
@@ -138,7 +147,11 @@ func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 			IssuedAt: now.Unix(),
 			Expiry:   expiresAt.Unix(),
 		})
-		redisErr := db.Set(authSid, user.Email, token, time.Duration(24*7)*time.Hour, true)
+		redisErr := db.Set(authSid, user.UserId, string(token), time.Duration(24*7)*time.Hour, true)
+		value := db.Get(authSid, user.UserId)
+		if value == nil {
+
+		}
 		if err != nil {
 			ctx.StopWithError(iris.StatusInternalServerError, redisErr)
 		}
