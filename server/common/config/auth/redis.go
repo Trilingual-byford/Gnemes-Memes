@@ -6,10 +6,17 @@ import (
 	"time"
 )
 
-func GetRedisDatabase(logger *golog.Logger) *redis.Database {
+type RedisManagerOfAuth struct {
+	Database *redis.Database
+	Addr     string
+	Logger   *golog.Logger
+}
+
+func Init(logger *golog.Logger) RedisManagerOfAuth {
+	addr := "127.0.0.1:6379"
 	redis := redis.New(redis.Config{
 		Network:   "tcp",
-		Addr:      "127.0.0.1:6379",
+		Addr:      addr,
 		Timeout:   time.Duration(30) * time.Second,
 		MaxActive: 10,
 		Username:  "",
@@ -20,6 +27,9 @@ func GetRedisDatabase(logger *golog.Logger) *redis.Database {
 	})
 	logger.Info("Init redis database successfully")
 
-	logger.Info("Init redis session successfully")
-	return redis
+	return RedisManagerOfAuth{Logger: logger, Addr: addr, Database: redis}
+}
+
+func (manager RedisManagerOfAuth) SetAuthInfo() {
+
 }

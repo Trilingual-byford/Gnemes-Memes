@@ -15,8 +15,8 @@ func main() {
 	app := iris.New()
 	logger := app.Logger()
 	userRepo := repository.NewMongoUserRepository(logger)
-	authDB := auth.GetRedisDatabase(logger)
-	app.PartyFunc("/", api.NewRouter(userRepo, authDB))
+	authDBManager := auth.Init(logger)
+	app.PartyFunc("/", api.NewRouter(userRepo, authDBManager))
 	err := app.Listen(":8082")
 	if err != nil {
 		//TODO

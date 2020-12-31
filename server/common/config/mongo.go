@@ -27,7 +27,7 @@ func GetGnemesDBClient(db DB, logger *golog.Logger) (*mongo.Client, error) {
 	case USER:
 		mongoClientOpt = options.Client().ApplyURI("mongodb://admin:password@127.0.0.1:27017/")
 	default:
-		logger.Error("DB initialFailed,No Db was signed")
+		logger.Error("DB initial Failed,No Db was signed")
 		return nil, errors.New("DB initialFailed")
 	}
 

@@ -42,23 +42,20 @@ func (u *UserClaims) Validate() error {
 }
 
 // Verify allows only authorized clients.
-func Verify() iris.Handler {
+func Verify(redis *redis.Database) iris.Handler {
 	secret := getSecretKey()
 	verifier := jwt.NewVerifier(jwt.HS256, []byte(secret), jwt.Expected{Issuer: utils.AppName})
 	verifier.Extractors = []jwt.TokenExtractor{jwt.FromHeader} // extract token only from Authorization: Bearer $token
-	//return verifier.Verify(func() interface{} {
-	//
-	//	return new(UserClaims)
-	//})
 	return func(ctx *context.Context) {
 		token := []byte(verifier.RequestToken(ctx))
 		verifiedToken, err := verifier.VerifyToken(token)
-		//verifiedToken.Payload
 		if err != nil {
-
+			verifier.ErrorHandler(ctx, err)
 		}
 		const verifiedTokenContextKey = "iris.jwt.token"
+		//verifiedToken.Payload
 		ctx.Values().Set(verifiedTokenContextKey, verifiedToken)
+
 		ctx.Next()
 	}
 }
@@ -141,7 +138,7 @@ func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 			IssuedAt: now.Unix(),
 			Expiry:   expiresAt.Unix(),
 		})
-		redisErr := db.Set(authSid, user.Email, "token", time.Duration(30)*time.Second, true)
+		redisErr := db.Set(authSid, user.Email, token, time.Duration(24*7)*time.Hour, true)
 		if err != nil {
 			ctx.StopWithError(iris.StatusInternalServerError, redisErr)
 		}
