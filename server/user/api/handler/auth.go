@@ -1,4 +1,4 @@
-package api
+package handler
 
 import (
 	"errors"
@@ -54,7 +54,6 @@ func Verify(redis *redis.Database) iris.Handler {
 			verifier.ErrorHandler(ctx, err)
 		}
 		const verifiedTokenContextKey = "iris.jwt.token"
-		//verifiedToken.Payload
 		ctx.Values().Set(verifiedTokenContextKey, verifiedToken)
 		userId := ctx.Params().Get("userId")
 		isLogin, loginErr := utils.CheckLoginStatus(redis, authSid, userId, string(token))
@@ -96,7 +95,7 @@ func SignUp(repo repository.UserRepository) iris.Handler {
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		}
-		user, err := repo.Create(username, userId, string(hashedPassword), email, "", sexType)
+		user, err := repo.CreateUser(username, userId, string(hashedPassword), email, "", sexType)
 		if err != nil {
 			ctx.StopWithJSON(iris.StatusBadRequest, err)
 		} else {
@@ -111,19 +110,11 @@ func SignIn(repo repository.UserRepository, db *redis.Database) iris.Handler {
 	signer := jwt.NewSigner(jwt.HS256, []byte(secret), 15*time.Minute)
 
 	return func(ctx iris.Context) {
-		/*
-			type LoginForm struct {
-				Username string `form:"username"`
-				Password string `form:"password"`
-			}
-			and ctx.ReadForm OR use the ctx.FormValue(s) method.
-		*/
-
 		var (
 			userEmail = ctx.FormValue("userEmail")
 			password  = ctx.FormValue("password")
 		)
-		user, ok := repo.GetByUserEmailAndPassword(userEmail, password)
+		user, ok := repo.GetUserInfoByUserEmailAndPassword(userEmail, password)
 		if !ok {
 			ctx.StopWithText(iris.StatusBadRequest, "wrong username or password")
 			return

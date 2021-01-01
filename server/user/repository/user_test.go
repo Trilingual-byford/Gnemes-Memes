@@ -9,7 +9,7 @@ import (
 func TestGETALLUSER(t *testing.T) {
 	logger := golog.New()
 	userRepo := NewMongoUserRepository(logger)
-	all, err := userRepo.GetAll()
+	all, err := userRepo.GetUsers()
 	if err != nil {
 		assert.Fail(t, err.Error())
 	}
@@ -18,14 +18,14 @@ func TestGETALLUSER(t *testing.T) {
 func TestFindUERBYEMAILANDPASSWORD_POSITIVE(t *testing.T) {
 	logger := golog.New()
 	userRepo := NewMongoUserRepository(logger)
-	user, b := userRepo.GetByUserEmailAndPassword("niconicocsc@gmail.com", "password")
+	user, b := userRepo.GetUserInfoByUserEmailAndPassword("niconicocsc@gmail.com", "password")
 	assert.True(t, b)
 	assert.NotEmpty(t, user)
 }
 func TestFindUERBYEMAILANDPASSWORD_NEGATIVE(t *testing.T) {
 	logger := golog.New()
 	userRepo := NewMongoUserRepository(logger)
-	user, b := userRepo.GetByUserEmailAndPassword("niconicocsc@gmail.com", "wrongpassword")
+	user, b := userRepo.GetUserInfoByUserEmailAndPassword("niconicocsc@gmail.com", "wrongpassword")
 	assert.False(t, b)
 	assert.NotEmpty(t, user)
 }

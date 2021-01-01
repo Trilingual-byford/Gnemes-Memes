@@ -13,10 +13,14 @@ import (
 )
 
 type UserRepository interface {
-	Create(username, userId, password, email, avatar string, sex model.SexType) (model.User, error)
-	GetByUserEmailAndPassword(email, password string) (model.User, bool)
-	GetAllGnemesColletionsByUserEmail(email string) (model.User, bool)
-	GetAll() ([]model.User, error)
+	//Available for regular users
+	CreateUser(username, userId, password, email, avatar string, sex model.SexType) (model.User, error)
+	GetUserInfoByUserEmailAndPassword(userId, password string) (model.User, bool)
+	GetColletionListByUserId(userId string) ([]string, bool)
+	GetLikeListByUserId(userId string) ([]string, bool)
+
+	//Only available for inner system management
+	GetUsers() ([]model.User, error)
 }
 
 var (
@@ -29,7 +33,11 @@ type mongoUserRepository struct {
 	logger         *golog.Logger
 }
 
-func (m *mongoUserRepository) GetAllGnemesColletionsByUserEmail(email string) (model.User, bool) {
+func (m *mongoUserRepository) GetLikeListByUserId(userId string) ([]string, bool) {
+	panic("implement me")
+}
+
+func (m *mongoUserRepository) GetColletionListByUserId(userId string) ([]string, bool) {
 	panic("implement me")
 }
 
@@ -45,10 +53,10 @@ func NewMongoUserRepository(logger *golog.Logger) UserRepository {
 	return m
 }
 
-func (m *mongoUserRepository) Create(username, userId, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
+func (m *mongoUserRepository) CreateUser(username, userId, hashedPassword, email, avatar string, sex model.SexType) (model.User, error) {
 	//user := model.User(username,email,avatar,hashedPassword,sex,time.Now(),time.Now(),true,true,nil,nil)
 	roles := []model.Role{model.USER}
-	user := model.User{username, email, userId, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil}
+	user := model.User{username, email, userId, avatar, hashedPassword, roles, sex, time.Now(), time.Now(), true, true, nil, nil, nil}
 	result, err := m.userCollection.InsertOne(context.Background(), user)
 	if err != nil {
 		m.logger.Error("failed to save userInfo", err)
@@ -58,7 +66,7 @@ func (m *mongoUserRepository) Create(username, userId, hashedPassword, email, av
 	return user, err
 }
 
-func (m *mongoUserRepository) GetByUserEmailAndPassword(userEmail, password string) (model.User, bool) {
+func (m *mongoUserRepository) GetUserInfoByUserEmailAndPassword(userEmail, password string) (model.User, bool) {
 	var users model.User
 	err := m.userCollection.FindOne(context.Background(), bson.M{"email": userEmail}).Decode(&users)
 	if err != nil {
@@ -75,7 +83,7 @@ func (m *mongoUserRepository) GetByUserEmailAndPassword(userEmail, password stri
 
 }
 
-func (m *mongoUserRepository) GetAll() ([]model.User, error) {
+func (m *mongoUserRepository) GetUsers() ([]model.User, error) {
 	filter := bson.D{{}}
 	cur, err := m.userCollection.Find(context.Background(), filter)
 	var users []model.User
@@ -90,7 +98,3 @@ func (m *mongoUserRepository) GetAll() ([]model.User, error) {
 	}
 	return users, err
 }
-
-//func ()  {
-//
-//}

@@ -28,8 +28,16 @@ type User struct {
 	//NativeLanguage
 	//Location
 	//Country
-	LikedCollections []string `bson:"likedCollections" json:"likedCollections"`
-	SavedCollection  []string `bson:"savedCollection" json:"savedCollection"`
+	Collections []CollectedItem `bson:"collections" json:"collections"`
+	Likes       []CollectedItem `bson:"likes" json:"likes"`
+	Histories   []History       `bson:"histories" json:"histories"`
+}
+type CollectedItem struct {
+	CollectedDate time.Time
+}
+type History struct {
+	GnemesId  string    `bson:"gnemesId" json:"gnemesId"`
+	CheckTime time.Time `bson:"registryDate" json:"registryDate"`
 }
 
 func GetSexTypeFromString(x string) (SexType, error) {
