@@ -1,6 +1,6 @@
 
 
-# GNEMES
+# GNEMES(如果这都不算爱)
 
 ### Gnemes is a application of sharing and learning funny pic of Memes・ネタ・梗
 #### (Chinese 梗(GENG) Japanese ネタ（ネタ）English（Memes）) 
