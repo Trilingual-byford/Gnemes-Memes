@@ -16,7 +16,7 @@ func main() {
 	logger := app.Logger()
 	userRepo := repository.NewMongoUserRepository(logger)
 	authDBManager := auth.Init(logger)
-	app.PartyFunc("/", api.NewRouter(userRepo, authDBManager))
+	app.PartyFunc("/api/v1/gnemes", api.NewRouter(userRepo, authDBManager))
 	err := app.Listen(":8082")
 	if err != nil {
 		//TODO

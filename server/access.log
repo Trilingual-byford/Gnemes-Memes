@@ -88,3 +88,48 @@
   "ip": "::1",
   "bytes_sent": -1
 }
+{
+  "timestamp": "2021-06-26 02:41:27",
+  "latency": 19445321,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "127.0.0.1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2021-06-26 02:41:29",
+  "latency": 3052018,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "127.0.0.1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2021-06-26 02:41:43",
+  "latency": 9580325600,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "127.0.0.1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2021-06-26 02:42:00",
+  "latency": 2993860,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "127.0.0.1",
+  "bytes_sent": -1
+}
+{
+  "timestamp": "2021-06-26 02:43:51",
+  "latency": 7365619,
+  "code": 200,
+  "method": "GET",
+  "path": "/api/v1/gnemes/memes",
+  "ip": "127.0.0.1",
+  "bytes_sent": -1
+}
